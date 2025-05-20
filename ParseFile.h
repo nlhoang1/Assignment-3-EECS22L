@@ -2,10 +2,24 @@
 #ifndef PARSEFILE_H
 #define PARSEFILE_H
 
-#include "graph.h"  // For struct Requirement or similar
+#include <stdio.h>
 
-// Parses the markdown file and returns an array/list of requirements
-// filename: path to the markdown file
-Requirement* parse_srs(const char *filename, int *req_count);
+// define struct to hold a parsed requirement
+typedef struct {
+    char id[50];
+    char description[256];
+    // Add other fields like priority, dependencies, etc.
+} Requirement;
 
-#endif // PARSER_H
+/**
+ * Parses the markdown SRS file and fills the array of requirements.
+ * 
+ * @param filename The path to the markdown SRS file.
+ * @param reqs Array of Requirement structures to populate.
+ * @param max_reqs Maximum number of requirements to parse.
+ * @return The number of requirements parsed, or -1 on error.
+ */
+//Parses the SRS file and fills the array of requirements
+int parse_srs_file(const char *filename, Requirement *reqs, int max_reqs);
+
+#endif
