@@ -66,17 +66,17 @@ void createDepGraph(const Requirement *reqs, int reqsLEN, DepList *graph) {
 // Print the dependency graph in the required format
 void printDepGraph(const DepList *graph, int reqsLEN) {
     for (int i = 0; i < reqsLEN; i++) {
-        // Print the record line
-        printf("%04d: %s --\n", i + 1, graph[i].id);
+        // Print the record line with the actual line number
+        printf("Line %d: %s --\n", graph[i].line_number, graph[i].id);
 
         // Print parent dependencies (parent -> this requirement)
         for (int p = 0; p < graph[i].num_parents; p++) {
-            printf("%04d: %s -> %s\n", i + 1, graph[i].parents[p], graph[i].id);
+            printf("Line %d: %s -> %s\n", graph[i].parent_lines[p], graph[i].parents[p], graph[i].id);
         }
 
         // Print child dependencies (this requirement -> child)
         for (int c = 0; c < graph[i].num_children; c++) {
-            printf("%04d: %s -> %s\n", i + 1, graph[i].id, graph[i].children[c]);
+            printf("Line %d: %s -> %s\n", graph[i].child_lines[c], graph[i].id, graph[i].children[c]);
         }
     }
 }
