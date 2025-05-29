@@ -16,17 +16,21 @@ int main(int argc, char *argv[]) {
     FILE *file;
     char line[MAX_LINE_LENGTH];
     int i;
+    char inputFile[256];
 
-    if (argc < 2) {
-        fprintf(stderr, "Usage: %s <source_file>\n", argv[0]);
+    // Prompt user for input file
+    printf("Input the SRS file: ");
+    if (scanf("%255s", inputFile) != 1) {
+        fprintf(stderr, "Error: Failed to read input.\n");
         return 1;
     }
-    printf("Source file: %s\n", argv[1]);
+
+    printf("Source file: %s\n", inputFile);
 
     // Print the first 3 lines of the file
-    file = fopen(argv[1], "r");
+    file = fopen(inputFile, "r");
     if (!file) {
-        fprintf(stderr, "Error: Could not open file '%s'\n", argv[1]);
+        fprintf(stderr, "Error: Could not open file '%s'\n", inputFile);
         return 1;
     }
     for (i = 0; i < 3; i++) {
@@ -40,7 +44,7 @@ int main(int argc, char *argv[]) {
 
     // Parse requirements
     Requirement reqs[MAX_REQS];
-    int reqCount = parseSRS(argv[1], reqs, MAX_REQS);
+    int reqCount = parseSRS(inputFile, reqs, MAX_REQS);
 
     // Print and generate dependency graph/report
     if (reqCount > 0) {
