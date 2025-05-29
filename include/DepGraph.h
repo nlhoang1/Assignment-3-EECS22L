@@ -9,7 +9,6 @@ typedef struct {
     int dependencies;
 } ReqNode;
 
-
  //Creates a dependency graph from array of parsed requirements from SRS
  //reqs = Array of parsed requirements
  //reqsLEN = Number of requirements in the array
