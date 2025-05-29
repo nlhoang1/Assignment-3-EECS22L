@@ -63,7 +63,7 @@ void createDepGraph(const Requirement *reqs, int reqsLEN, DepList *graph) {
     }
 }
 
-// Print the dependency graph in the required format
+// Print the dependency graph in the required format to terminal (similar to the sample output)
 void printDepGraph(const DepList *graph, int reqsLEN) {
     for (int i = 0; i < reqsLEN; i++) {
         // Print the record line with the actual line number
