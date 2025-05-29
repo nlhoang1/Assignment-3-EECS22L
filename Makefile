@@ -1,4 +1,5 @@
 # Makefile
+#made,ran, and cleaned using PowerShell !!
 CFLAGS = -Wall -std=c11
 CC = gcc
 
@@ -26,5 +27,5 @@ Report.o: $(SRC)/Report.c $(INCLUDE)/Report.h
 
 clean:
 	del /Q $(EXE) *.o 2>nul || exit 0
-	
-#ran using powershell
+
+#made,ran, and cleaned using PowerShell !!
