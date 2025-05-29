@@ -18,21 +18,25 @@ int main(int argc, char *argv[]) {
     int i;
     char inputFile[256];
 
-    // Prompt user for input file
-    printf("Input the SRS file: ");
-    if (scanf("%255s", inputFile) != 1) {
-        fprintf(stderr, "Error: Failed to read input.\n");
-        return 1;
+    // Continuously prompt user for input file until a valid file is opened
+    while (1) {
+        printf("Input the SRS file: ");
+        if (scanf("%255s", inputFile) != 1) {
+            fprintf(stderr, "Error: Failed to read input.\n");
+            return 1;
+        }
+
+        file = fopen(inputFile, "r");
+        if (!file) {
+            fprintf(stderr, "Error: Could not open file '%s'. Please try again.\n", inputFile);
+        } else {
+            break; // Valid file opened
+        }
     }
 
     printf("Source file: %s\n", inputFile);
 
     // Print the first 3 lines of the file
-    file = fopen(inputFile, "r");
-    if (!file) {
-        fprintf(stderr, "Error: Could not open file '%s'\n", inputFile);
-        return 1;
-    }
     for (i = 0; i < 3; i++) {
         if (fgets(line, sizeof(line), file) != NULL) {
             printf("%s", line);
