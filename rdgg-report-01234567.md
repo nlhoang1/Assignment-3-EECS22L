@@ -3,7 +3,6 @@
 <center> Project 1 - Chess Game </center>
 
 Line 23: REQ-FN-FEAT-0000 --
-Line 25: -- -> REQ-FN-FEAT-0000
 Line 26: REQ-FN-FEAT-0000 -> REQ-FN-FEAT-1001
 Line 26: REQ-FN-FEAT-0000 -> REQ-FN-FEAT-1002
 Line 26: REQ-FN-FEAT-0000 -> REQ-FN-FEAT-1003

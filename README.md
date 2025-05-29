@@ -1,5 +1,5 @@
 # Assignment-3-EECS22L, Natalie Hoang
-# Objective: When given an input SRS file, the program will parse through the file, print a dependency graph and corresponding text report.
+# Objective: When given an input SRS file, the program will parse through the file, print a dependency graph and corresponding report.
 
 # Copilot was used to auto-complete module function and struct definitions!!
 

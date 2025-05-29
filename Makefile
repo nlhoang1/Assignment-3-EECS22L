@@ -5,10 +5,12 @@ CC = gcc
 SRC = src
 INCLUDE = include
 
-all: main
+EXE = rdgg-01234567.exe
 
-main: main.o DepGraph.o ParseFile.o Report.o
-	$(CC) $(CFLAGS) main.o DepGraph.o ParseFile.o Report.o -o main
+all: $(EXE)
+
+$(EXE): main.o DepGraph.o ParseFile.o Report.o
+	$(CC) $(CFLAGS) main.o DepGraph.o ParseFile.o Report.o -o $(EXE)
 
 main.o: $(SRC)/main.c $(INCLUDE)/ParseFile.h $(INCLUDE)/DepGraph.h $(INCLUDE)/Report.h
 	$(CC) $(CFLAGS) -I$(INCLUDE) -c $(SRC)/main.c -o main.o
@@ -23,4 +25,6 @@ Report.o: $(SRC)/Report.c $(INCLUDE)/Report.h
 	$(CC) $(CFLAGS) -I$(INCLUDE) -c $(SRC)/Report.c -o Report.o
 
 clean:
-	del /Q main.exe main *.o 2>nul || exit 0
+	del /Q $(EXE) *.o 2>nul || exit 0
+	
+#ran using powershell

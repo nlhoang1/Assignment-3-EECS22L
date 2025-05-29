@@ -6,7 +6,7 @@
 #include <string.h>
 #include <regex.h>
 
-// Helper to trim whitespace
+//Trim whitespace function
 static void trim(char *str) {
     char *end;
     while (*str == ' ' || *str == '\t') str++;
@@ -24,33 +24,33 @@ int parseSRS(const char *filename, Requirement *reqs, int max_reqs) {
     Requirement currentReq;
     int inReq = 0;
 
-    // Check if the file was opened successfully
+    //Sanity check if the file was opened successfully
     if (!file) {
         fprintf(stderr, "Error: Could not open file '%s'\n", filename);
         return -1;
     }
 
-    // Read the file line by line
+    //Read the file by each line
     while (fgets(line, sizeof(line), file)) {
-        lineno++; // Increment line number
+        lineno++; //increment line number
 
-        // Check for requirement ID line
+        //Check for requirement ID line
         if (strncmp(line, "ID:", 3) == 0) {
-            // If already inside a requirement and we have not yet reached the max limit, save the current requirement
+            //If inside a requirement (max limit not reached) save the current requirement
             if (inReq && reqCount < max_reqs) {
                 reqs[reqCount++] = currentReq;
             }
-            // Initialize a new requirement
+            //Initialize a new requirement
             memset(&currentReq, 0, sizeof(Requirement));
             inReq = 1;
-            // Extract ID
+            //get REQ ID
             char *id_start = strstr(line, "REQ-");
             if (id_start) {
                 sscanf(id_start, "%49s", currentReq.id);
                 currentReq.line_number = lineno;
             }
         } 
-        // Check for Parents line
+        //Ceck for Parents
         else if (strstr(line, "Parents:")) {
             char *p = strchr(line, ':');
             if (p) {
@@ -59,7 +59,7 @@ int parseSRS(const char *filename, Requirement *reqs, int max_reqs) {
                 currentReq.parent_line = lineno;
             }
         } 
-        // Check for Children line
+        //Check for Children
         else if (strstr(line, "Children:")) {
             char *p = strchr(line, ':');
             if (p) {
@@ -68,7 +68,7 @@ int parseSRS(const char *filename, Requirement *reqs, int max_reqs) {
                 currentReq.child_line = lineno;
             }
         } 
-        // Check for Description line
+        //Check for Description
         else if (strstr(line, "Description:")) {
             char *p = strchr(line, ':');
             if (p) {
@@ -77,12 +77,12 @@ int parseSRS(const char *filename, Requirement *reqs, int max_reqs) {
             }
         }
     }
-    // Add the last requirement if file ends after a record
+    //Add the last requirement if file ends after a record
     if (inReq && reqCount < max_reqs) {
         reqs[reqCount++] = currentReq;
     }
 
-    // Clean up: close the file and free the regex resources
+    //close the file and free the regex resources
     fclose(file);
     return reqCount;
 }

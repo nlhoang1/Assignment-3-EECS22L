@@ -16,22 +16,22 @@ int main(int argc, char *argv[]) {
     FILE *file;
     char line[MAX_LINE_LENGTH];
     int i;
-    char inputFile[512]; // Increased size for longer file paths
+    char inputFile[512];
 
-    // Prompt user for input file path until a valid file is opened or 'x' to exit
+    //prompt user for input file path until a valid file is opened or 'x' to exit
     while (1) {
         printf("Input the SRS file (or 'x' to exit): ");
         if (fgets(inputFile, sizeof(inputFile), stdin) == NULL) {
             fprintf(stderr, "Error: Failed to read input.\n");
             return 1;
         }
-        // Remove trailing newline if present
+        //Remove trailing newline if present
         size_t len = strlen(inputFile);
         if (len > 0 && inputFile[len - 1] == '\n') {
             inputFile[len - 1] = '\0';
         }
 
-        // Exit if user enters 'x' or 'X'
+        //exit if user enters 'x' or 'X'
         if (strcmp(inputFile, "x") == 0 || strcmp(inputFile, "X") == 0) {
             printf("Exiting program.\n");
             return 0;
@@ -41,13 +41,13 @@ int main(int argc, char *argv[]) {
         if (!file) {
             fprintf(stderr, "Error: Could not open file '%s'. Please try again.\n", inputFile);
         } else {
-            break; // Valid file opened
+            break; 
         }
     }
 
     printf("Source file: %s\n", inputFile);
 
-    // Print the first 3 lines of the file
+    //Print the first 3 lines of file
     for (i = 0; i < 3; i++) {
         if (fgets(line, sizeof(line), file) != NULL) {
             printf("%s", line);
@@ -58,20 +58,20 @@ int main(int argc, char *argv[]) {
     printf("\n");
     fclose(file);
 
-    // Parse requirements
+    //Parse requirements from the SRS file (use ParseFile module)
     Requirement reqs[MAX_REQS];
     int reqCount = parseSRS(inputFile, reqs, MAX_REQS);
 
-    // Print and generate dependency graph/report
+    //print and generate dependency graph/report
     if (reqCount > 0) {
-        // Build dependency graph
+        //build dependency graph (use DepGraph module)
         DepList graph[MAX_REQS];
         createDepGraph(reqs, reqCount, graph);
 
-        // Print dependency graph to console
+        //print dependency graph to terminal (use DepGraph module)
         printDepGraph(graph, reqCount);
 
-        // Generate report file (replace 01234567 with your actual student ID)
+        //create report file (future implementation: replace 01234567 with student ID)
         CreateReport(graph, reqCount, "rdgg-report-01234567.md");
         printf("Report generated: rdgg-report-01234567.md\n");
     } else {

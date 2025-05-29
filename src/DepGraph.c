@@ -14,7 +14,7 @@
  * The structure is flexible and easy to traverse for printing or further processing.
  */
 
-// Helper function to trim leading/trailing whitespace and return pointer to trimmed string
+//Trim whitespace function and return pointer to trimmed string
 static char* trim(char *str) {
     while (*str == ' ' || *str == '\t') str++; // skip leading
     char *end = str + strlen(str) - 1;
@@ -22,7 +22,7 @@ static char* trim(char *str) {
     return str;
 }
 
-// Build the dependency graph from parsed requirements
+//Function that builds the dependency graph from parsed requirements
 void createDepGraph(const Requirement *reqs, int reqsLEN, DepList *graph) {
     for (int i = 0; i < reqsLEN; i++) {
         strncpy(graph[i].id, reqs[i].id, sizeof(graph[i].id));
@@ -31,7 +31,7 @@ void createDepGraph(const Requirement *reqs, int reqsLEN, DepList *graph) {
         graph[i].num_parents = 0;
         graph[i].num_children = 0;
 
-        // Parse parents
+        //Parse parents
         if (strlen(reqs[i].parents) > 0) {
             char parents_copy[256];
             strcpy(parents_copy, reqs[i].parents);
@@ -46,7 +46,7 @@ void createDepGraph(const Requirement *reqs, int reqsLEN, DepList *graph) {
             }
         }
 
-        // Parse children
+        //Parse children
         if (strlen(reqs[i].children) > 0) {
             char children_copy[256];
             strcpy(children_copy, reqs[i].children);
@@ -63,23 +63,23 @@ void createDepGraph(const Requirement *reqs, int reqsLEN, DepList *graph) {
     }
 }
 
-// Print the dependency graph in the required format to terminal (similar to the sample output)
+//Function that prints the dependency graph in the required format to terminal (similar to the sample output)
 void printDepGraph(const DepList *graph, int reqsLEN) {
     for (int i = 0; i < reqsLEN; i++) {
-        // Print the record line with the actual line number
+        //print line number
         printf("Line %d: %s --\n", graph[i].line_number, graph[i].id);
 
-        // Print parent dependencies (parent -> this requirement)
+        //print parent dependencies ("parent -> this requirement")
         for (int p = 0; p < graph[i].num_parents; p++) {
-            // Skip if the parent string is empty or just "--"
+            //skip when the parent string is empty or just "--"
             if (strlen(graph[i].parents[p]) == 0) continue;
             if (strcmp(graph[i].parents[p], "--") == 0) continue;
             printf("Line %d: %s -> %s\n", graph[i].parent_lines[p], graph[i].parents[p], graph[i].id);
         }
 
-        // Print child dependencies (this requirement -> child)
+        //Print child dependencies ("this requirement -> child")
         for (int c = 0; c < graph[i].num_children; c++) {
-            // Skip if the child string is empty or just "--"
+            //skip when child string is empty or just "--"
             if (strlen(graph[i].children[c]) == 0) continue;
             if (strcmp(graph[i].children[c], "--") == 0) continue;
             printf("Line %d: %s -> %s\n", graph[i].child_lines[c], graph[i].id, graph[i].children[c]);
