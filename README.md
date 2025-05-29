@@ -1,7 +1,7 @@
 # Assignment-3-EECS22L, Natalie Hoang
 # Objective: When given an input SRS file, the program will parse through the file, print a dependency graph and corresponding report.
 
-# Copilot was used to auto-complete module function and struct definitions!!
+# Copilot was used to auto-complete module functions and struct implementation!!!
 
 # ParseFile.c -.h  Module reads input markdown SRS file and parses through text. Creates array of Requirement structs containing requirement ID, requirement's ID, description, parents, children, and line numbers.
 

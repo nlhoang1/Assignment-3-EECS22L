@@ -72,8 +72,8 @@ int main(int argc, char *argv[]) {
         printDepGraph(graph, reqCount);
 
         //create report file (future implementation: replace 01234567 with student ID)
-        CreateReport(graph, reqCount, "rdgg-report-01234567.md");
-        printf("Report generated: rdgg-report-01234567.md\n");
+        CreateReport(graph, reqCount, "rdgg-report-17583771.md");
+        printf("Report generated: rdgg-report-17583771.md\n");
     } else {
         printf("No requirements found or error parsing file.\n");
     }
