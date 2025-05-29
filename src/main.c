@@ -18,9 +18,9 @@ int main(int argc, char *argv[]) {
     int i;
     char inputFile[512]; // Increased size for longer file paths
 
-    // Prompt user for input file path until a valid file is opened
+    // Prompt user for input file path until a valid file is opened or 'x' to exit
     while (1) {
-        printf("Input the SRS file: ");
+        printf("Input the SRS file (or 'x' to exit): ");
         if (fgets(inputFile, sizeof(inputFile), stdin) == NULL) {
             fprintf(stderr, "Error: Failed to read input.\n");
             return 1;
@@ -29,6 +29,12 @@ int main(int argc, char *argv[]) {
         size_t len = strlen(inputFile);
         if (len > 0 && inputFile[len - 1] == '\n') {
             inputFile[len - 1] = '\0';
+        }
+
+        // Exit if user enters 'x' or 'X'
+        if (strcmp(inputFile, "x") == 0 || strcmp(inputFile, "X") == 0) {
+            printf("Exiting program.\n");
+            return 0;
         }
 
         file = fopen(inputFile, "r");
