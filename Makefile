@@ -2,22 +2,25 @@
 CFLAGS = -Wall -std=c11
 CC = gcc
 
+SRC = src
+INCLUDE = include
+
 all: main
 
 main: main.o DepGraph.o ParseFile.o Report.o
 	$(CC) $(CFLAGS) main.o DepGraph.o ParseFile.o Report.o -o main
 
-main.o: main.c ParseFile.h DepGraph.h Report.h
-	$(CC) $(CFLAGS) -c main.c
+main.o: $(SRC)/main.c $(INCLUDE)/ParseFile.h $(INCLUDE)/DepGraph.h $(INCLUDE)/Report.h
+	$(CC) $(CFLAGS) -I$(INCLUDE) -c $(SRC)/main.c -o main.o
 
-ParseFile.o: ParseFile.c ParseFile.h
-	$(CC) $(CFLAGS) -c ParseFile.c
+ParseFile.o: $(SRC)/ParseFile.c $(INCLUDE)/ParseFile.h
+	$(CC) $(CFLAGS) -I$(INCLUDE) -c $(SRC)/ParseFile.c -o ParseFile.o
 
-DepGraph.o: DepGraph.c DepGraph.h
-	$(CC) $(CFLAGS) -c DepGraph.c
+DepGraph.o: $(SRC)/DepGraph.c $(INCLUDE)/DepGraph.h
+	$(CC) $(CFLAGS) -I$(INCLUDE) -c $(SRC)/DepGraph.c -o DepGraph.o
 
-Report.o: Report.c Report.h
-	$(CC) $(CFLAGS) -c Report.c
+Report.o: $(SRC)/Report.c $(INCLUDE)/Report.h
+	$(CC) $(CFLAGS) -I$(INCLUDE) -c $(SRC)/Report.c -o Report.o
 
 clean:
 	rm -f main *.o

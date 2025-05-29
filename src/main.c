@@ -42,13 +42,21 @@ int main(int argc, char *argv[]) {
     Requirement reqs[MAX_REQS];
     int reqCount = parseSRS(argv[1], reqs, MAX_REQS);
 
-    // Print dependency graph
+    // Print and generate dependency graph/report
     if (reqCount > 0) {
-        printDepGraph(reqs, reqCount);
+        // Build dependency graph
+        DepList graph[MAX_REQS];
+        createDepGraph(reqs, reqCount, graph);
+
+        // Print dependency graph to console
+        printDepGraph(graph, reqCount);
+
+        // Generate report file (replace 01234567 with your actual student ID)
+        CreateReport(graph, reqCount, "rdgg-report-01234567.md");
+        printf("Report generated: rdgg-report-01234567.md\n");
     } else {
         printf("No requirements found or error parsing file.\n");
     }
 
-    // (LATER) code to generate the report
     return 0;
 }
