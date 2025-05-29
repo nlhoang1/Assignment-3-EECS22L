@@ -27,6 +27,9 @@ void CreateReport(const DepList *graph, int num_reqs, const char *filename) {
 
         // Parent dependencies
         for (int p = 0; p < graph[i].num_parents; p++) {
+            // Skip if the parent string is empty or just "--"
+            if (strlen(graph[i].parents[p]) == 0) continue;
+            if (strcmp(graph[i].parents[p], "--") == 0) continue;
             fprintf(f, "Line %d: %s -> %s\n", graph[i].parent_lines[p], graph[i].parents[p], graph[i].id);
         }
 
