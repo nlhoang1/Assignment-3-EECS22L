@@ -32,6 +32,10 @@ void CreateReport(const DepList *graph, int num_reqs, const char *filename) {
 
         // Child dependencies
         for (int c = 0; c < graph[i].num_children; c++) {
+            // Skip if the child string is empty after trimming
+            if (strlen(graph[i].children[c]) == 0) continue;
+            // Optionally, skip if the child is just "--"
+            if (strcmp(graph[i].children[c], "--") == 0) continue;
             fprintf(f, "Line %d: %s -> %s\n", graph[i].child_lines[c], graph[i].id, graph[i].children[c]);
         }
     }
