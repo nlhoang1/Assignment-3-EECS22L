@@ -76,6 +76,9 @@ void printDepGraph(const DepList *graph, int reqsLEN) {
 
         // Print child dependencies (this requirement -> child)
         for (int c = 0; c < graph[i].num_children; c++) {
+            // Skip if the child string is empty or just "--"
+            if (strlen(graph[i].children[c]) == 0) continue;
+            if (strcmp(graph[i].children[c], "--") == 0) continue;
             printf("Line %d: %s -> %s\n", graph[i].child_lines[c], graph[i].id, graph[i].children[c]);
         }
     }
