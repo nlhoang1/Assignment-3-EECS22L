@@ -42,7 +42,10 @@ void main(int argc, char *argv[]) {
             break; // Less than 3 lines in file
         }
     }
-    // (LATER) code to parse the file
+    fclose(file); // Close after reading preview lines
+
+    // Now parse the file for requirement tags
+    parseSRS(argv[1], NULL, 0);
 
     // (LATER) code to print the dependency graph
 
