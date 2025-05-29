@@ -10,44 +10,45 @@
 #include <string.h>
 
 #define MAX_LINE_LENGTH 1024
-//(STUB) get user input for source file name, parse the file, print dependency graph, and generate report
-void main(int argc, char *argv[]) {
+#define MAX_REQS 100
+
+int main(int argc, char *argv[]) {
     FILE *file;
     char line[MAX_LINE_LENGTH];
     int i;
 
-    //get user input for source file name
     if (argc < 2) {
-         
         fprintf(stderr, "Usage: %s <source_file>\n", argv[0]);
-        return;
-        //print file name and first 3 lines of the file
-        printf("Source file: %s\n", argv[1]);
+        return 1;
     }
-    // Print the selected file name
     printf("Source file: %s\n", argv[1]);
 
-    // Open the file for reading
+    // Print the first 3 lines of the file
     file = fopen(argv[1], "r");
-    if (file == NULL) {
+    if (!file) {
         fprintf(stderr, "Error: Could not open file '%s'\n", argv[1]);
         return 1;
     }
-
-    // Print the first 3 lines of the file
     for (i = 0; i < 3; i++) {
         if (fgets(line, sizeof(line), file) != NULL) {
             printf("%s", line);
         } else {
-            break; // Less than 3 lines in file
+            break;
         }
     }
-    fclose(file); // Close after reading preview lines
+    fclose(file);
 
-    // Now parse the file for requirement tags
-    parseSRS(argv[1], NULL, 0);
+    // Parse requirements
+    Requirement reqs[MAX_REQS];
+    int reqCount = parseSRS(argv[1], reqs, MAX_REQS);
 
-    // (LATER) code to print the dependency graph
+    // Print dependency graph
+    if (reqCount > 0) {
+        printDepGraph(reqs, reqCount);
+    } else {
+        printf("No requirements found or error parsing file.\n");
+    }
 
     // (LATER) code to generate the report
+    return 0;
 }

@@ -6,28 +6,27 @@
 #include <string.h>
 #include <regex.h>
 
-// Parse through the markdown SRS file and fill num array of requirements
+// Helper to trim whitespace
+static void trim(char *str) {
+    char *end;
+    while (*str == ' ' || *str == '\t') str++;
+    end = str + strlen(str) - 1;
+    while (end > str && (*end == ' ' || *end == '\t' || *end == '\n')) *end-- = '\0';
+}
+
+// Parse through the markdown SRS file and fill array of requirements
 int parseSRS(const char *filename, Requirement *reqs, int max_reqs) {
     // Declare variables for file handling and regex
     FILE *file = fopen(filename, "r");
     char line[1024];
     int lineno = 0;
-    regex_t regex;
-    regmatch_t matches[1];
-
-    // Define the regex pattern for requirement tags: REQ-XX-YYYY-DDDD
-    const char *pattern = "REQ-[A-Z]{2}-[A-Z]{4}-[0-9]{4}";
-
-    // Compile the regex pattern
-    if (regcomp(&regex, pattern, REG_EXTENDED)) {
-        fprintf(stderr, "Could not compile regex\n");
-        return -1;
-    }
+    int reqCount = 0;
+    Requirement currentReq;
+    int inReq = 0;
 
     // Check if the file was opened successfully
     if (!file) {
         fprintf(stderr, "Error: Could not open file '%s'\n", filename);
-        regfree(&regex);
         return -1;
     }
 
@@ -35,30 +34,57 @@ int parseSRS(const char *filename, Requirement *reqs, int max_reqs) {
     while (fgets(line, sizeof(line), file)) {
         lineno++; // Increment line number
 
-        char *cursor = line; // Pointer to traverse the line
-
-        // Search for all matches of the requirement tag in the current line
-        while (regexec(&regex, cursor, 1, matches, 0) == 0) {
-            int start = matches[0].rm_so; // Start index of match
-            int end = matches[0].rm_eo;   // End index of match
-
-            // Extract the matched tag into a buffer
-            char tag[17];
-            strncpy(tag, cursor + start, end - start);
-            tag[end - start] = '\0';
-
-            // Print the line number and the found tag
-            printf("%04d: %s\n", lineno, tag);
-
-            // Move the cursor forward to continue searching for more tags in the same line
-            cursor += end;
+        // Check for requirement ID line
+        if (strncmp(line, "ID:", 3) == 0) {
+            // If already inside a requirement and we have not yet reached the max limit, save the current requirement
+            if (inReq && reqCount < max_reqs) {
+                reqs[reqCount++] = currentReq;
+            }
+            // Initialize a new requirement
+            memset(&currentReq, 0, sizeof(Requirement));
+            inReq = 1;
+            // Extract ID
+            char *id_start = strstr(line, "REQ-");
+            if (id_start) {
+                sscanf(id_start, "%49s", currentReq.id);
+                currentReq.line_number = lineno;
+            }
+        } 
+        // Check for Parents line
+        else if (strstr(line, "Parents:")) {
+            char *p = strchr(line, ':');
+            if (p) {
+                strncpy(currentReq.parents, p + 1, sizeof(currentReq.parents) - 1);
+                trim(currentReq.parents);
+                currentReq.parent_line = lineno;
+            }
+        } 
+        // Check for Children line
+        else if (strstr(line, "Children:")) {
+            char *p = strchr(line, ':');
+            if (p) {
+                strncpy(currentReq.children, p + 1, sizeof(currentReq.children) - 1);
+                trim(currentReq.children);
+                currentReq.child_line = lineno;
+            }
+        } 
+        // Check for Description line
+        else if (strstr(line, "Description:")) {
+            char *p = strchr(line, ':');
+            if (p) {
+                strncpy(currentReq.description, p + 1, sizeof(currentReq.description) - 1);
+                trim(currentReq.description);
+            }
         }
+    }
+    // Add the last requirement if file ends after a record
+    if (inReq && reqCount < max_reqs) {
+        reqs[reqCount++] = currentReq;
     }
 
     // Clean up: close the file and free the regex resources
     fclose(file);
-    regfree(&regex);
-    return 0;
+    return reqCount;
 }
 
 

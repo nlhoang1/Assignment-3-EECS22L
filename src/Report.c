@@ -1,9 +1,41 @@
 //Report.c
 // Module that generates a report of the requirement dependency graph
 #include "Report.h"
+#include "DepGraph.h"
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
-//(STUB) function that generates a report
-void CreateReport(const ReqNode *graph, int num_reqs, const char *filename);
-// (LATER) code to generate a report
+/*
+ * Generates a markdown report of the dependency graph.
+ * The format matches the provided sample.
+ */
+void CreateReport(const DepList *graph, int num_reqs, const char *filename) {
+    FILE *f = fopen(filename, "w");
+    if (!f) {
+        printf("Error: Could not open report file for writing.\n");
+        return;
+    }
+
+    // Header (customize as needed)
+    fprintf(f, "# <center>Software Requirements Specification </center>\n");
+    fprintf(f, "<center> EECS 22L - Spring 2025 </center>\n");
+    fprintf(f, "<center> Project 1 - Chess Game </center>\n\n");
+
+    // For each requirement, print record and dependencies
+    for (int i = 0; i < num_reqs; i++) {
+        // Record line
+        fprintf(f, "Line %d: %s --\n", i + 1, graph[i].id);
+
+        // Parent dependencies
+        for (int p = 0; p < graph[i].num_parents; p++) {
+            fprintf(f, "Line %d: %s -> %s\n", i + 1, graph[i].parents[p], graph[i].id);
+        }
+
+        // Child dependencies
+        for (int c = 0; c < graph[i].num_children; c++) {
+            fprintf(f, "Line %d: %s -> %s\n", i + 1, graph[i].id, graph[i].children[c]);
+        }
+    }
+
+    fclose(f);
+}

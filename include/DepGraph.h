@@ -3,21 +3,28 @@
 #define DEPGRAPH_H
 #include "ParseFile.h"  //Can use Requirement struct
 
-//Struct for each requirement or "node" in requirement array. Create variables for dependencies and IDs of eahc requirement 
+/*
+ * Data Structure Choice: Array of Structures (DepList)
+ * ----------------------------------------------------
+ * Used an array of DepList structs to represent the dependency graph.
+ * Each DepList stores the requirement ID and arrays of parent and child IDs.
+ * This allows efficient access by index and is simple to implement for a moderate number of requirements.
+ * The structure is flexible and easy to traverse for printing or further processing.
+ */
+#define MAX_DEP 10
+
 typedef struct {
     char id[50];
-    int dependencies;
-} ReqNode;
+    char parents[MAX_DEP][50];
+    int num_parents;
+    char children[MAX_DEP][50];
+    int num_children;
+} DepList;
 
- //Creates a dependency graph from array of parsed requirements from SRS
- //reqs = Array of parsed requirements
- //reqsLEN = Number of requirements in the array
- //graph = Output graph array (with ReqNode structs for each requirement w their dependencies and IDs)
-void createDepGraph(const Requirement *reqs, int reqsLEN, ReqNode *graph);
+// Creates a dependency graph from array of parsed requirements from SRS
+void createDepGraph(const Requirement *reqs, int reqsLEN, DepList *graph);
 
-//Prints the dependency graph
-//graph = Output graph array (with ReqNode structs for each requirement w their dependencies and IDs)
-//reqsLEN = Number of requirements in the array
-void printDepGraph(const ReqNode *graph, int reqsLEN);
+// Prints the dependency graph
+void printDepGraph(const DepList *graph, int reqsLEN);
 
 #endif

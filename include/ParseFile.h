@@ -8,6 +8,11 @@
 typedef struct {
     char id[50];
     char description[256];
+    char parents[256];
+    char children[256];
+    int line_number;
+    int parent_line;
+    int child_line;
 } Requirement;
 
 //Parses the markdown SRS file and fills the array of requirements.
