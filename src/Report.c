@@ -16,10 +16,10 @@ void CreateReport(const DepList *graph, int num_reqs, const char *filename) {
         return;
     }
 
-    // Header (customize as needed)
+    // Header
     fprintf(f, "# <center>Software Requirements Specification </center>\n");
     fprintf(f, "<center> EECS 22L - Spring 2025 </center>\n");
-    fprintf(f, "<center> Project 1 - Chess Game </center>\n\n");
+    fprintf(f, "<center> Project 1 - Chess Game </center>\n\n"); // Blank line after header
 
     for (int i = 0; i < num_reqs; i++) {
         // Record line

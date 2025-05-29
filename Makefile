@@ -23,5 +23,4 @@ Report.o: $(SRC)/Report.c $(INCLUDE)/Report.h
 	$(CC) $(CFLAGS) -I$(INCLUDE) -c $(SRC)/Report.c -o Report.o
 
 clean:
-    del /Q main.exe main *.o 2>nul || exit 0
-# rm -f main *.o
+	del /Q main.exe main *.o 2>nul || exit 0
