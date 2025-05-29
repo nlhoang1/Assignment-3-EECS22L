@@ -14,12 +14,12 @@
  * The structure is flexible and easy to traverse for printing or further processing.
  */
 
-// Helper function to trim leading/trailing whitespace
-static void trim(char *str) {
-    char *end;
-    while (*str == ' ' || *str == '\t') str++;
-    end = str + strlen(str) - 1;
+// Helper function to trim leading/trailing whitespace and return pointer to trimmed string
+static char* trim(char *str) {
+    while (*str == ' ' || *str == '\t') str++; // skip leading
+    char *end = str + strlen(str) - 1;
     while (end > str && (*end == ' ' || *end == '\t' || *end == '\n')) *end-- = '\0';
+    return str;
 }
 
 // Build the dependency graph from parsed requirements
@@ -37,8 +37,8 @@ void createDepGraph(const Requirement *reqs, int reqsLEN, DepList *graph) {
             strcpy(parents_copy, reqs[i].parents);
             char *parent = strtok(parents_copy, ",");
             while (parent && graph[i].num_parents < MAX_DEP) {
-                trim(parent);
-                strncpy(graph[i].parents[graph[i].num_parents], parent, 50);
+                char *trimmed_parent = trim(parent);
+                strncpy(graph[i].parents[graph[i].num_parents], trimmed_parent, 50);
                 graph[i].parents[graph[i].num_parents][49] = '\0';
                 graph[i].parent_lines[graph[i].num_parents] = reqs[i].parent_line;
                 graph[i].num_parents++;
@@ -52,8 +52,8 @@ void createDepGraph(const Requirement *reqs, int reqsLEN, DepList *graph) {
             strcpy(children_copy, reqs[i].children);
             char *child = strtok(children_copy, ",");
             while (child && graph[i].num_children < MAX_DEP) {
-                trim(child);
-                strncpy(graph[i].children[graph[i].num_children], child, 50);
+                char *trimmed_child = trim(child);
+                strncpy(graph[i].children[graph[i].num_children], trimmed_child, 50);
                 graph[i].children[graph[i].num_children][49] = '\0';
                 graph[i].child_lines[graph[i].num_children] = reqs[i].child_line;
                 graph[i].num_children++;
