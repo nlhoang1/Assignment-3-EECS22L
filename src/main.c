@@ -16,14 +16,19 @@ int main(int argc, char *argv[]) {
     FILE *file;
     char line[MAX_LINE_LENGTH];
     int i;
-    char inputFile[256];
+    char inputFile[512]; // Increased size for longer file paths
 
-    // Continuously prompt user for input file until a valid file is opened
+    // Prompt user for input file path until a valid file is opened
     while (1) {
         printf("Input the SRS file: ");
-        if (scanf("%255s", inputFile) != 1) {
+        if (fgets(inputFile, sizeof(inputFile), stdin) == NULL) {
             fprintf(stderr, "Error: Failed to read input.\n");
             return 1;
+        }
+        // Remove trailing newline if present
+        size_t len = strlen(inputFile);
+        if (len > 0 && inputFile[len - 1] == '\n') {
+            inputFile[len - 1] = '\0';
         }
 
         file = fopen(inputFile, "r");

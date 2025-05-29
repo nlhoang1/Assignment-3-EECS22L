@@ -15,9 +15,12 @@
 
 typedef struct {
     char id[50];
+    int line_number; // Line number of the ID in the SRS file
     char parents[MAX_DEP][50];
+    int parent_lines[MAX_DEP]; // Line numbers for each parent
     int num_parents;
     char children[MAX_DEP][50];
+    int child_lines[MAX_DEP]; // Line numbers for each child
     int num_children;
 } DepList;
 

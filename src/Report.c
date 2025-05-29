@@ -21,19 +21,18 @@ void CreateReport(const DepList *graph, int num_reqs, const char *filename) {
     fprintf(f, "<center> EECS 22L - Spring 2025 </center>\n");
     fprintf(f, "<center> Project 1 - Chess Game </center>\n\n");
 
-    // For each requirement, print record and dependencies
     for (int i = 0; i < num_reqs; i++) {
         // Record line
-        fprintf(f, "Line %d: %s --\n", i + 1, graph[i].id);
+        fprintf(f, "Line %d: %s --\n", graph[i].line_number, graph[i].id);
 
         // Parent dependencies
         for (int p = 0; p < graph[i].num_parents; p++) {
-            fprintf(f, "Line %d: %s -> %s\n", i + 1, graph[i].parents[p], graph[i].id);
+            fprintf(f, "Line %d: %s -> %s\n", graph[i].parent_lines[p], graph[i].parents[p], graph[i].id);
         }
 
         // Child dependencies
         for (int c = 0; c < graph[i].num_children; c++) {
-            fprintf(f, "Line %d: %s -> %s\n", i + 1, graph[i].id, graph[i].children[c]);
+            fprintf(f, "Line %d: %s -> %s\n", graph[i].child_lines[c], graph[i].id, graph[i].children[c]);
         }
     }
 

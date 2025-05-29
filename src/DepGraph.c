@@ -25,9 +25,9 @@ static void trim(char *str) {
 // Build the dependency graph from parsed requirements
 void createDepGraph(const Requirement *reqs, int reqsLEN, DepList *graph) {
     for (int i = 0; i < reqsLEN; i++) {
-        // Copy the requirement ID
         strncpy(graph[i].id, reqs[i].id, sizeof(graph[i].id));
         graph[i].id[sizeof(graph[i].id) - 1] = '\0';
+        graph[i].line_number = reqs[i].line_number;
         graph[i].num_parents = 0;
         graph[i].num_children = 0;
 
@@ -40,6 +40,7 @@ void createDepGraph(const Requirement *reqs, int reqsLEN, DepList *graph) {
                 trim(parent);
                 strncpy(graph[i].parents[graph[i].num_parents], parent, 50);
                 graph[i].parents[graph[i].num_parents][49] = '\0';
+                graph[i].parent_lines[graph[i].num_parents] = reqs[i].parent_line;
                 graph[i].num_parents++;
                 parent = strtok(NULL, ",");
             }
@@ -54,6 +55,7 @@ void createDepGraph(const Requirement *reqs, int reqsLEN, DepList *graph) {
                 trim(child);
                 strncpy(graph[i].children[graph[i].num_children], child, 50);
                 graph[i].children[graph[i].num_children][49] = '\0';
+                graph[i].child_lines[graph[i].num_children] = reqs[i].child_line;
                 graph[i].num_children++;
                 child = strtok(NULL, ",");
             }
